@@ -23,7 +23,7 @@ router.get('/:id', function (req, res, next) {
 });
 
 // Update an existing RSVP
-router.put('/:id', function (req, res, next) {
+router.put('/edit/:id', function (req, res, next) {
     console.log(`UPDATE RSVP ${req.body.rsvp_person} ${req.body.rsvp_going}`);
     RSVPCollection.findOneAndUpdate({_id: req.params.id}, req.body, (errors, results) => {
         errors ? res.send(errors) : res.send(results);
@@ -31,13 +31,18 @@ router.put('/:id', function (req, res, next) {
 });
 
 // Delete a specific RSVP -IMPLEMENT YOUR OWN FUNCTION
-router.delete('/:id', function (req, res, next) {
-    res.send(`DELETE RSVP ${req.params.id}`);
+router.delete('/delete/:id', function (req, res, next) {
+    RSVPCollection.deleteOne(req.body, (errors)=>{
+        if(errors) res.send(errors);
+        else res.send("Your RSVP has been deleted");
+    });
 });
 
 //Create a new RSVP -IMPLEMENT YOUR OWN FUNCTION
-router.post('/', function (req, res, next) {
-    res.send(`CREATE NEW RSVP ${req.body.rsvp_person} ${req.body.rsvp_going}`);
+router.post('/create', function (req, res, next) {
+    RSVPCollection.create(req.body, (errors, results)=>{
+        if(errors) res.send(errors);
+        else res.send(results);
+    });
 });
-
 module.exports = router;
